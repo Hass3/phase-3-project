@@ -1,4 +1,4 @@
-from __init__ import CURSOR,CONN
+from . import CURSOR,CONN
 
 
 class Hospital:
@@ -17,7 +17,7 @@ class Hospital:
     
     @name.setter
     def name(self,value):
-        if not isinstance(value,str) and not (1<= len(value)<= 20):
+        if not isinstance(value,str) or not (1<= len(value)<= 20):
             raise ValueError("Name must be a 1-20 char string")
         self._name = value
 
@@ -27,9 +27,9 @@ class Hospital:
     
     @city.setter
     def city(self,value):
-        if not isinstance(value,str) and len(value) == 0:
+        if not isinstance(value,str) or len(value) == 0:
             raise ValueError("City must be a non-empty string")
-        self.city = value
+        self._city = value
 
     @classmethod
     def create_table(cls):
@@ -116,12 +116,9 @@ class Hospital:
         sql = """
             SELECT *
             FROM hospitals
-            WHERE id = ?
+            WHERE name =  ?
         """
 
         row = CURSOR.execute(sql,(name,)).fetchone()
         return cls.instance_from_db(row) if row else None
     
-
-Hospital.create_table()
-Bealmount = Hospital("Bealmount","Dearborn")
