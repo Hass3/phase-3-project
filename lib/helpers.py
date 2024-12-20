@@ -1,6 +1,7 @@
 # lib/helpers.py
 from models.hospital import Hospital
 from models.patient import Patient
+from models.patient import illnesses
 
 def list_all_hospitals():
     hospitals = Hospital.get_all()
@@ -24,41 +25,77 @@ def create_hospital():
 
 def delete_hospital():
     id = input("Enter the hospital id: ")
-    try:
-        if hospital:= Hospital.find_by_id(id):
-            hospital.delete()
-            print(f"Succesfully deleted {hospital.name}")
-    except Exception as exc:
-        print("Deletion unsuccesful",exc)
+    if hospital:= Hospital.find_by_id(id):
+        hospital.delete()
+        print(f"Succesfully deleted {hospital.name}")
+            
+    else:
+        print(f"Deletion unsuccesful Id:{id} Not Found.")
 
 def search_hospitals_by_first_letter():
-    letter = input("Enter the first letter of the hospital name: ")
-    for hospital in Hospital.get_all():
-        if hospital.name.startswith(letter):
+    letter = input("Enter the first letter of the hospital name: ").lower()
+    filterd_hospitals = [hospital for hospital in Hospital.get_all() if hospital.name.lower().startswith(letter)]
+    if filterd_hospitals:
+        for hospital in filterd_hospitals:
             print(hospital)
-    print(f"{letter} Not Found")
-            
+    else:
+        print(f"{letter} Not Found")
 
-def list_all_patients_by_hospital_name():
-    pass
 
 def list_all_patients():
-    pass
+    patients = Patient.get_all()
+    for patient in patients:
+        print(patient)
 
 def find_patient_by_name():
-    pass
+    name = input("Enter the patient's name: ")
+    patient = Patient.find_by_name(name)
+    print(patient) if patient else print(f"{name} Not Found.")
+
 
 def search_patients_by_first_letter():
-    pass
+    letter = input("Enter The first letter of the patient's name: ")
+    filtered_patients = [patient for patient in Patient.get_all() if patient.name.lower().startswith(letter)]
+    if filtered_patients:
+        for patient in filtered_patients:
+            print(patient)
+    else:
+        print(f"{letter} Not Found")
+
 
 def create_patient():
-    pass
+    name = input("Enter the patient's name: ")
+    age = input("Enter the patient's age: ")
+    for ill in illnesses:
+        print(ill)
+    illness = input("Chosse the Illness from above: ")
+    hospital_id = input("Enter the patient's hospital_id: ")
+    try:
+        patient = Patient.create(name,int(age),illness,int(hospital_id))
+        print(f"Succesfully created {patient}")
+    except Exception as exc:
+        print(f"unsuccesful could not create ",exc)
 
 def delete_patient():
-    pass
+    id = input("Enter the patient's id you would like to delete: ")
+    if patient := Patient.find_by_id(id):
+        patient.delete()
+        print(f"Succesfully deleted {id}")
+        
+    else:
+        print(f"{id} Not Found")
 
 def list_all_patients_with_same_illness():
-    pass
+    for ill in illnesses:
+        print(ill)
+    illness = input("Enter The illness from above: ")
+    filtered_patients = [patient for patient in Patient.get_all()if illness == patient.illness ]
+    if filtered_patients:
+        for patient in filtered_patients:
+            print(patient)
+    else:
+        print(f"No one has same illness: {illness}")
+
 
 def exit_program():
     print("Goodbye!")

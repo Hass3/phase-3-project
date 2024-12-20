@@ -7,7 +7,6 @@ from helpers import (
     create_hospital,
     delete_hospital,
     search_hospitals_by_first_letter,
-    list_all_patients_by_hospital_name,
     list_all_patients,
     find_patient_by_name,
     search_patients_by_first_letter,
@@ -34,18 +33,16 @@ def main():
         elif choice == "5":
             search_hospitals_by_first_letter()
         elif choice == "6":
-            list_all_patients_by_hospital_name()
-        elif choice == "7":
             list_all_patients()
-        elif choice == '8':
+        elif choice == '7':
             find_patient_by_name()
-        elif choice == "9":
+        elif choice == "8":
             search_patients_by_first_letter()
-        elif choice == "10":
+        elif choice == "9":
             create_patient()
-        elif choice == "11":
+        elif choice == "10":
             delete_patient()
-        elif choice == "12":
+        elif choice == "11":
             list_all_patients_with_same_illness()
         else:
             print("Invalid choice")
@@ -59,13 +56,12 @@ def menu():
     print("3. Create hospital")
     print("4. Delete hospital")
     print("5. Search for hospitals by entering the first letter of the name")
-    print("6. List all patients by entering the hospital name")
-    print("7 List all patients")
-    print("8. Find patient by name ")
-    print("9. Search for patients by entering the first letter of their name")
-    print("10. Create patient")
-    print("11: Delete patient")
-    print("12. List all patients with the same illness")
+    print("6 List all patients")
+    print("7. Find patient by name ")
+    print("8. Search for patients by entering the first letter of their name")
+    print("9. Create patient")
+    print("10: Delete patient")
+    print("11. List all patients with the same illness")
 
 if __name__ == "__main__":
     main()

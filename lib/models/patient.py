@@ -1,5 +1,6 @@
 from . import CURSOR, CONN
 from models.hospital import Hospital
+
 illnesses = [
     "Common Cold",
     "Influenza",
@@ -76,7 +77,7 @@ class Patient:
     @age.setter
     def age(self,value):
         if not isinstance(value,int) or value > 120:
-            raise ValueError("Age must be a realistic integer")
+            raise ValueError("Age must be realistic and an integer")
         self._age = value
 
     @property
@@ -157,11 +158,11 @@ class Patient:
 
         if patient:
             patient.name = row[1]
-            patient.age= row[2]
+            patient.age= int(row[2])
             patient.illness = row[3]
             patient.hospital_id = row[4]
         else:
-            patient = cls(row[1],row[2],row[3],row[4])
+            patient = cls(row[1],int(row[2]),row[3],row[4])
             patient.id = row[0]
             cls.all[patient.id] = patient
         return patient
@@ -195,4 +196,3 @@ class Patient:
         """
         row = CURSOR.execute(sql,(name,)).fetchone()
         return cls.instance_from_db(row) if row else None
-
