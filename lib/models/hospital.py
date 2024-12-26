@@ -18,7 +18,7 @@ class Hospital:
     @name.setter
     def name(self,value):
         if not isinstance(value,str) or not (1<= len(value)<= 20):
-            raise ValueError("Name must be a 1-20 char string")
+            raise ValueError("Name must be 1-20 char ")
         self._name = value
 
     @property
@@ -28,7 +28,7 @@ class Hospital:
     @city.setter
     def city(self,value):
         if not isinstance(value,str) or len(value) == 0:
-            raise ValueError("City must be a non-empty string")
+            raise ValueError("City must not be empty")
         self._city = value
 
     @classmethod
@@ -120,5 +120,13 @@ class Hospital:
         """
         row = CURSOR.execute(sql,(name,)).fetchone()
         return cls.instance_from_db(row) if row else None
-    
-    
+    def patients(self):
+        from models.patient import Patient
+        sql = """
+            SELECT * FROM patients
+            WHERE hospital_id = ?
+        """
+
+        CURSOR.execute(sql,(self.id,))
+        rows = CURSOR.fetchall()
+        return [Patient.instance_from_db(row) for row in rows]

@@ -1,48 +1,6 @@
 from . import CURSOR, CONN
 from models.hospital import Hospital
 
-illnesses = [
-    "Common Cold",
-    "Influenza",
-    "COVID-19",
-    "Pneumonia",
-    "Bronchitis",
-    "Asthma",
-    "Diabetes",
-    "Hypertension",
-    "Arthritis",
-    "Osteoporosis",
-    "Heart Disease",
-    "Stroke",
-    "Alzheimer's Disease",
-    "Parkinson's Disease",
-    "Epilepsy",
-    "Cancer",
-    "HIV/AIDS",
-    "Tuberculosis",
-    "Malaria",
-    "Dengue Fever",
-    "Hepatitis A",
-    "Hepatitis B",
-    "Hepatitis C",
-    "Kidney Disease",
-    "Liver Disease",
-    "Depression",
-    "Anxiety Disorders",
-    "Bipolar Disorder",
-    "Schizophrenia",
-    "Obesity",
-    "Eating Disorders",
-    "Autoimmune Diseases",
-    "Thyroid Disorders",
-    "Migraine",
-    "Sinusitis",
-    "Allergies",
-    "Food Poisoning",
-    "Irritable Bowel Syndrome",
-    "Crohn's Disease",
-    "Ulcerative Colitis"
-]
 
 
 class Patient:
@@ -67,7 +25,7 @@ class Patient:
     @name.setter
     def name(self,value):
         if not isinstance(value,str) or len(value) == 0:
-            raise ValueError("Name must be a non-empty string")
+            raise ValueError("Name must not be empty")
         self._name = value
 
     @property
@@ -77,7 +35,7 @@ class Patient:
     @age.setter
     def age(self,value):
         if not isinstance(value,int) or value > 120:
-            raise ValueError("Age must be realistic and an integer")
+            raise ValueError("Age must be a realistic number")
         self._age = value
 
     @property
@@ -86,8 +44,8 @@ class Patient:
     
     @illness.setter
     def illness(self,value):
-        if not isinstance(value,str) or (len(value) == 0 or value not in illnesses):
-            raise ValueError("The ilness entered should be a non-empty string or be of the types of illnesses")
+        if not isinstance(value,str) or len(value) == 0:
+            raise ValueError("The illness entered should not be empty")
         self._illness = value
     
     @property
@@ -99,7 +57,7 @@ class Patient:
         if type(value) is int and Hospital.find_by_id(value):
             self._hospital_id = value
         else:
-            raise ValueError("Hospital_id must refernce a current hospital in the database ")
+            raise ValueError("must refernce a current hospital")
         
     @classmethod
     def create_table(cls):
@@ -145,6 +103,14 @@ class Patient:
         CONN.commit()
         del type(self).all[self.id]
         self.id = None
+    def update(self):
+        sql = """
+             UPDATE patients
+             SET name = ?, age = ? , illness = ?, hospital_id = ?
+             WHERE id = ?
+        """
+        CURSOR.execute(sql,(self.name,self.age,self.illness,self.hospital_id,self.id))
+        CONN.commit()
 
     @classmethod
     def create(cls,name,age,illness,hospital_id):

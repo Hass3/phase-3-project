@@ -1,17 +1,20 @@
 # lib/helpers.py
 from models.hospital import Hospital
-# from models.patient import Patient
-# from models.patient import illnesses
+from models.patient import Patient
 
 def list_all_hospitals():
     hospitals = Hospital.get_all()
-    for hospital in hospitals:
-        print(f"{hospital.id}.Hospital: {hospital.name}| City: {hospital.city}")
+    print("===================================================================")
+    print("**ALL HOSPITALS**")
+    for i, hospital in enumerate(hospitals,start=1):
+        print(f"{i}.name of hospital: {hospital.name}, City: {hospital.city}")
     print("***Please choose of the following***")
-    print("Type A to add a hospital. ")
     print("Type hospital's number for more info")
+    print("or")
+    print("Type a to add a hospital. ")
     print("Type b to go back")
     print("Type q to quit")
+    print("===================================================================")
     choice = input("Enter your choice: ")
     if choice == "Q" or choice == "q":
         exit_program()
@@ -19,92 +22,116 @@ def list_all_hospitals():
         return "cd.."
     elif choice == "a" or choice =="A":
         create_hospital()
-# def find_hospital_by_name():
-#     name = input("Enter the hospital's name: ")
-#     hospital = Hospital.find_by_name(name)
-#     print(hospital) if hospital else print (f"Hospital {name} not found")
+    elif choice.isdigit() and int(choice) in range(1,len(hospitals)+1):
+        list_all_patients(hospitals[int(choice)-1])
+    else:
+        print("Incorrect choice please try again")
+
+
+
+def list_all_patients(h):
+    print("===================================================================")
+    print(f"***ALL Patients of the {h.name} Hospital***")
+    patients = Hospital.patients(h)
+    for i,patient in enumerate(patients,start=1):
+        print(f"{i}.Name: {patient.name}")
+    print("Type the patient's number for more info")
+    print ("or")
+    print("Type a to add a patient")
+    print("Type b to go back")
+    print("Type m for main menu")
+    print("Type q to quit")
+    print("Type d to delete hospital ")
+    print("===================================================================")
+    choice = input("Enter your choice: ")
+    
+    if choice == "b" or choice == "B":
+        list_all_hospitals()       
+    elif choice == "q" or choice == "Q":
+        exit()
+    elif choice =="m" or choice =="M":
+        return 
+    elif choice == "d" or choice == "D":
+        Hospital.delete(h)
+        for p in patients:
+            p.delete()
+        list_all_hospitals()
+    elif choice == "a" or choice =="A":
+        create_patient(h)
+    elif choice.isdigit() and int(choice) in range(1,len(patients)+1):
+        chosen_patient(patients[int(choice)-1])
+    else:
+        print("Incorrect choice please try again")
+    
+
+def create_patient(h):
+    name = input("Enter the patient's name: ")
+    age = input("Enter the patient's age: ")
+    illness = input("Enter the patient's illness: ")
+    try:
+        Patient.create(name,int(age),illness,h.id)
+        list_all_patients(h)
+    except Exception as exc:
+        print("***The patient could not be added try again***", exc)
 
 def create_hospital():
     name = input("Enter the hospital name:")
     city = input("Enter which city the hospital is in: ")
+
     try:
         Hospital.create(name,city)
+        list_all_hospitals()
     except Exception as exc:
-        print("Error cannot be created", exc)
+        print("*******The hospital cannot be created please try again********.",exc)
+
+def chosen_patient(p):
+    print("---------------------------------------")
+    print(f"****{p.name}'s Information****")
+    print(f"Age: {p.age}")
+    print(f"illness:{p.illness}")
+    print("Type u or U to update patient")
+    print("or")
+    print("Type r to remove the patient")
+    print("Type b to go back")
+    print("Type m for main menu")
+    print("Type q to quit")
+    print("---------------------------------------")
+    choice = input("Enter your choice: ")
+    if choice == "u" or choice == "U":
+        update_patient(p)
+    elif choice == "b" or choice == "B":
+        go_back_patients(p)
+    elif choice == "u" or choice == "U":
+        update_patient(p)
+    # elif choice =='r' or choice == "R":
+    #     Patient.delete(p)                     ## work on this 
+    #     go_back_patients(p)
+    elif choice == "q" or choice == "Q":
+        exit()
+    elif choice =="m" or choice =="M":
+        return 
+    else:
+        print("Incorrect choice please try again")
+
+def update_patient(p):
+    try:
+        name = input("Enter new name: ")
+        p.name = name
+        age = input("Enter New Age: ")
+        p.age = int(age)
+        illness = input("Enter New illness: ")
+        p.illness = illness
+        p.update()
+        chosen_patient(p)
+    except Exception as exc:
+        print(f"****could not update {p.name} please try again****",exc)
+
+def go_back_patients(p):
+    for hospital in Hospital.get_all():
+        if p.hospital_id == hospital.id:
+            list_all_patients(hospital)
 
 
-# def delete_hospital():
-#     id = input("Enter the hospital id: ")
-#     if hospital:= Hospital.find_by_id(id):
-#         hospital.delete()
-#         print(f"Succesfully deleted {hospital.name}")
-            
-#     else:
-#         print(f"Deletion unsuccesful Id:{id} Not Found.")
-
-# def search_hospitals_by_first_letter():
-#     letter = input("Enter the first letter of the hospital name: ").lower()
-#     filterd_hospitals = [hospital for hospital in Hospital.get_all() if hospital.name.lower().startswith(letter)]
-#     if filterd_hospitals:
-#         for hospital in filterd_hospitals:
-#             print(hospital)
-#     else:
-#         print(f"{letter} Not Found")
-
-
-# def list_all_patients():
-#     patients = Patient.get_all()
-#     for patient in patients:
-#         print(patient)
-
-# def find_patient_by_name():
-#     name = input("Enter the patient's name: ")
-#     patient = Patient.find_by_name(name)
-#     print(patient) if patient else print(f"{name} Not Found.")
-
-
-# def search_patients_by_first_letter():
-#     letter = input("Enter The first letter of the patient's name: ")
-#     filtered_patients = [patient for patient in Patient.get_all() if patient.name.lower().startswith(letter)]
-#     if filtered_patients:
-#         for patient in filtered_patients:
-#             print(patient)
-#     else:
-#         print(f"{letter} Not Found")
-
-
-# def create_patient():
-#     name = input("Enter the patient's name: ")
-#     age = input("Enter the patient's age: ")
-#     for ill in illnesses:
-#         print(ill)
-#     illness = input("Chosse the Illness from above: ")
-#     hospital_id = input("Enter the patient's hospital_id: ")
-#     try:
-#         patient = Patient.create(name,int(age),illness,int(hospital_id))
-#         print(f"Succesfully created {patient}")
-#     except Exception as exc:
-#         print(f"unsuccesful could not create ",exc)
-
-# def delete_patient():
-#     id = input("Enter the patient's id you would like to delete: ")
-#     if patient := Patient.find_by_id(id):
-#         patient.delete()
-#         print(f"Succesfully deleted {id}")
-        
-#     else:
-#         print(f"{id} Not Found")
-
-# def list_all_patients_with_same_illness():
-#     for ill in illnesses:
-#         print(ill)
-#     illness = input("Enter The illness from above: ")
-#     filtered_patients = [patient for patient in Patient.get_all()if illness == patient.illness ]
-#     if filtered_patients:
-#         for patient in filtered_patients:
-#             print(patient)
-#     else:
-#         print(f"No one has same illness: {illness}")
 
 
 def exit_program():
