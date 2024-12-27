@@ -6,8 +6,10 @@ def list_all_hospitals():
     hospitals = Hospital.get_all()
     print("===================================================================")
     print("**ALL HOSPITALS**")
+    print("----------------------------------------------")
     for i, hospital in enumerate(hospitals,start=1):
         print(f"{i}.name of hospital: {hospital.name}, City: {hospital.city}")
+    print("----------------------------------------------")
     print("***Please choose of the following***")
     print("Type hospital's number for more info")
     print("or")
@@ -29,12 +31,15 @@ def list_all_hospitals():
 
 
 
+
 def list_all_patients(h):
     print("===================================================================")
     print(f"***ALL Patients of the {h.name} Hospital***")
     patients = Hospital.patients(h)
+    print("----------------------------------------------")
     for i,patient in enumerate(patients,start=1):
         print(f"{i}.Name: {patient.name}")
+    print("----------------------------------------------")
     print("Type the patient's number for more info")
     print ("or")
     print("Type a to add a patient")
@@ -65,9 +70,10 @@ def list_all_patients(h):
     
 
 def create_patient(h):
-    name = input("Enter the patient's name: ")
-    age = input("Enter the patient's age: ")
-    illness = input("Enter the patient's illness: ")
+    print("****Hit Enter When Filled****")
+    name = input("Provide the patient's name: ")
+    age = input("Provide the patient's age: ")
+    illness = input("Provide the patient's illness: ")
     try:
         Patient.create(name,int(age),illness,h.id)
         list_all_patients(h)
@@ -75,8 +81,9 @@ def create_patient(h):
         print("***The patient could not be added try again***", exc)
 
 def create_hospital():
-    name = input("Enter the hospital name:")
-    city = input("Enter which city the hospital is in: ")
+    print("****Hit Enter When Filled****")
+    name = input("Provide the hospital name:")
+    city = input("Provide which city the hospital is in: ")
 
     try:
         Hospital.create(name,city)
@@ -100,12 +107,12 @@ def chosen_patient(p):
     if choice == "u" or choice == "U":
         update_patient(p)
     elif choice == "b" or choice == "B":
-        go_back_patients(p)
+        go_back__to_patients_list(p)
     elif choice == "u" or choice == "U":
         update_patient(p)
-    # elif choice =='r' or choice == "R":
-    #     Patient.delete(p)                     ## work on this 
-    #     go_back_patients(p)
+    elif choice =='r' or choice == "R":  
+        Patient.delete(p)
+        go_back__to_patients_list(p)
     elif choice == "q" or choice == "Q":
         exit()
     elif choice =="m" or choice =="M":
@@ -115,18 +122,22 @@ def chosen_patient(p):
 
 def update_patient(p):
     try:
-        name = input("Enter new name: ")
-        p.name = name
-        age = input("Enter New Age: ")
-        p.age = int(age)
-        illness = input("Enter New illness: ")
-        p.illness = illness
+        print("****Hit Enter When Filled****")
+        name = input("Provide new name or leave blank to not change: ")
+        if name:
+            p.name = name
+        age = input("Provide New Age or leave blank to not change: ")
+        if age:
+            p.age = int(age)
+        illness = input("Provide New illness or leave blank to not change: ")
+        if illness:
+            p.illness = illness
         p.update()
         chosen_patient(p)
     except Exception as exc:
-        print(f"****could not update {p.name} please try again****",exc)
+        print(f"****could not update {p.name if p.name else 'Patient'} please try again****",exc)
 
-def go_back_patients(p):
+def go_back__to_patients_list(p):
     for hospital in Hospital.get_all():
         if p.hospital_id == hospital.id:
             list_all_patients(hospital)
