@@ -2,7 +2,7 @@
 from models.hospital import Hospital
 from models.patient import Patient
 
-def list_all_hospitals():
+def hospitals_helper():
     hospitals = Hospital.get_all()
     print("===================================================================")
     print("**ALL HOSPITALS**")
@@ -25,14 +25,14 @@ def list_all_hospitals():
     elif choice == "a" or choice =="A":
         create_hospital()
     elif choice.isdigit() and int(choice) in range(1,len(hospitals)+1):
-        list_all_patients(hospitals[int(choice)-1])
+        patients_helper(hospitals[int(choice)-1])
     else:
         print("Incorrect choice please try again")
 
 
 
 
-def list_all_patients(h):
+def patients_helper(h):
     print("===================================================================")
     print(f"***ALL Patients of the {h.name} Hospital***")
     patients = Hospital.patients(h)
@@ -51,7 +51,7 @@ def list_all_patients(h):
     choice = input("Enter your choice: ")
     
     if choice == "b" or choice == "B":
-        list_all_hospitals()       
+        hospitals_helper()       
     elif choice == "q" or choice == "Q":
         exit()
     elif choice =="m" or choice =="M":
@@ -60,7 +60,7 @@ def list_all_patients(h):
         Hospital.delete(h)
         for p in patients:
             p.delete()
-        list_all_hospitals()
+        hospitals_helper()
     elif choice == "a" or choice =="A":
         create_patient(h)
     elif choice.isdigit() and int(choice) in range(1,len(patients)+1):
@@ -76,7 +76,7 @@ def create_patient(h):
     illness = input("Provide the patient's illness: ")
     try:
         Patient.create(name,int(age),illness,h.id)
-        list_all_patients(h)
+        patients_helper(h)
     except Exception as exc:
         print("***The patient could not be added try again***", exc)
 
@@ -87,7 +87,7 @@ def create_hospital():
 
     try:
         Hospital.create(name,city)
-        list_all_hospitals()
+        hospitals_helper()
     except Exception as exc:
         print("*******The hospital cannot be created please try again********.",exc)
 
@@ -126,10 +126,10 @@ def update_patient(p):
         name = input("Provide new name or leave blank to not change: ")
         if name:
             p.name = name
-        age = input("Provide New Age or leave blank to not change: ")
+        age = input("Provide new Age or leave blank to not change: ")
         if age:
             p.age = int(age)
-        illness = input("Provide New illness or leave blank to not change: ")
+        illness = input("Provide new illness or leave blank to not change: ")
         if illness:
             p.illness = illness
         p.update()
@@ -137,10 +137,11 @@ def update_patient(p):
     except Exception as exc:
         print(f"****could not update {p.name if p.name else 'Patient'} please try again****",exc)
 
+
 def go_back__to_patients_list(p):
     for hospital in Hospital.get_all():
         if p.hospital_id == hospital.id:
-            list_all_patients(hospital)
+            patients_helper(hospital)
 
 
 

@@ -14,21 +14,30 @@ using python. Also creating A table for my database
 
 ## cli.py
 My Command Line Interface file when runned, Prompts the following commands that the user will be able to enter.
-I imported the Helper funtions from Helpers.py to fulfill those desired commands.When this file is runned the printed commands
-appear and whatever the user enters 0-11 runs the command.
-
+I imported the Helper funtion hospitals_helper from Helpers.py. The main menu of my cli shows a welcome message plus 
+a choice to choose of the following show all hospitals and quit. 
 ## Helpers.py
-For this file, I created a few helper functions to accomplish the desired commands in the CLI.
-Imported is the Patient and Hospital classes which allow me to make these speical functions like allowing the user to
-create, find, delete.This makes my appliction user friendly not showing the backend and allows easy implementation of the database
-through the command line interface.  
+For my Helpers.py file i created a few functions to help make this CLI very user friendly.A few of these helper functions 
+implement features like fetching all the hospitals or patients.Allow uses to go back or go to the main menu. Allow the user to 
+update, add, or delete a hospital or patient. 
+
 
 ## A few Helper functions created
-1.def search_patients_by_first_letter(). This function allows the user enter the first letter of the patient's name. 
-Also returns all the patients with that same first letter. This functionalty is also case insensive and allows the user to enter a lower or
-upper case letter and returns the same result.
+1. ### def hospitals_helper(): 
 
-2.def list_all_patients_with_same_illness() For this function I imported the illness list from my patients.py file. 
-This function prompts the user to enter one of the above ilness from my illnesses list. When entered A list of all the patients
-with the same illness appears.
+This function prints out all the hospitals in a numbered order. The user is able to add a hospital,
+go back, quit, or type the hospital's number for more information. If the user types the desired hospital's number then.
+All the patients for that hosptial shows up using the patients_helper() function.
 
+2. ### def patients_helper(): 
+
+For this function a few things are impleted simmarly to the function explained above.
+One of which being when the hospital number is typed this function prints out all the patients for that specifc hospital. 
+in a numbered list This function allows the user to delete the hospital, add a new patient, go back,main menu, or quit the progran. Also allows
+the user to type in the patients number for more info. 
+
+3. ### def chosen_patient(): 
+
+In this function, I allowed the user to do of the following. Update, delete the patient, go back, main menu, 
+and quit the program. All these functions and this one prints out prompts and implements features that helps the command line interface 
+become very user friendly. 

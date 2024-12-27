@@ -2,7 +2,7 @@
 
 from helpers import (
     exit_program,
-    list_all_hospitals
+    hospitals_helper
 )
 
 
@@ -11,7 +11,7 @@ def main():
         menu()
         choice = input("> ")
         if choice == "1":
-            list_all_hospitals()
+            hospitals_helper()
         elif choice == "2":
             exit_program()
 
