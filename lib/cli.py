@@ -16,6 +16,7 @@ def main():
             exit_program()
 
 def menu():
+    print("_____Main Menu____")
     print("****Welcome Back! Please select an option****:")
     print("1. Show All Hospitals ")
     print("2. Quit")
