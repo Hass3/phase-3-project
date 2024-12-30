@@ -149,3 +149,4 @@ def go_back__to_patients_list(p):
 def exit_program():
     print("Goodbye!")
     exit()
+
