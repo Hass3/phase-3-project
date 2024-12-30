@@ -108,8 +108,6 @@ def chosen_patient(p):
         update_patient(p)
     elif choice == "b" or choice == "B":
         go_back__to_patients_list(p)
-    elif choice == "u" or choice == "U":
-        update_patient(p)
     elif choice =='r' or choice == "R":  
         Patient.delete(p)
         go_back__to_patients_list(p)
