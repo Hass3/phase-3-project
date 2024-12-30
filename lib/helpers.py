@@ -99,7 +99,7 @@ def chosen_patient(p):
     print("Type u or U to update patient")
     print("or")
     print("Type r to remove the patient")
-    print("Type b to go back to main menu")
+    print("Type b to go back")
     print("Type m for main menu")
     print("Type q to quit")
     print("---------------------------------------")
