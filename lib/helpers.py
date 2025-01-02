@@ -21,7 +21,7 @@ def hospitals_helper():
     if choice == "Q" or choice == "q":
         exit_program()
     elif choice =="B" or choice == "b":
-        return "cd.."
+        return
     elif choice == "a" or choice =="A":
         create_hospital()
     elif choice.isdigit() and int(choice) in range(1,len(hospitals)+1):
